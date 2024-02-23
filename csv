@@ -1,4 +1,10 @@
 # rubrikraden för hela projektet
+# import
+import time
+import datetime
+
+#if start_date <= datetime.datetime.strptime(row[0].strip(), "%Y-%m-%d").date() <= end_date:
+
 # Bokförd ; Valutadatum ; Verifikationsnummer ; Text ; Belopp ; Saldo
 raw_data = """
 
@@ -202,15 +208,45 @@ data_lists = [row.split(';') for row in rows]
 header = data_lists[0]
 
 # Variabel för att hålla reda på totala summan
-total_sum = 0
+total_sum_dreams = 0
+total_sum_lon = 0
+total_sum_ICA = 0
 
+# Loopa genom varje rad, hoppa över rubrik- och separatorraden
+#Ur-exemplet
+#for row in data_lists[1:]:
+    # Om texten är "DREAMS", lägg till beloppet till total_sum
+#    if row[3].strip() == "DREAMS":
+#        amount = row[4].replace(' ', '').replace(',', '.')  # Ta bort mellanslag och ersätt kommatecknet med en punkt
+#        total_sum += float(amount)  # Konvertera till flyttal och lägg till i total_sum
+
+# Lön
+for row in data_lists[1:]:
+    # Om texten är "DREAMS", lägg till beloppet till total_sum
+    if row[2].strip() == "9900000000":
+        lon = row[4].replace(' ', '').replace(',', '.')  # Ta bort mellanslag och ersätt kommatecknet med en punkt
+        total_sum_lon += float(lon)  # Konvertera till flyttal och lägg till i total_sum
+
+# DREAMS
 # Loopa genom varje rad, hoppa över rubrik- och separatorraden
 for row in data_lists[1:]:
     # Om texten är "DREAMS", lägg till beloppet till total_sum
     if row[3].strip() == "DREAMS":
-        amount = row[4].replace(' ', '').replace(',', '.')  # Ta bort mellanslag och ersätt kommatecknet med en punkt
-        total_sum += float(amount)  # Konvertera till flyttal och lägg till i total_sum
+        DREAMS = row[4].replace(' ', '').replace(',', '.')  # Ta bort mellanslag och ersätt kommatecknet med en punkt
+        total_sum_dreams += float(DREAMS)  # Konvertera till flyttal och lägg till i total_sum
 
+#ICA - jan 2024
+for row in data_lists[1:]:
+    if row[0].strip() == "2024-01-01" <= "2024-01-31" and row[3].strip() == "ICA" or "ica":
+        ICA = row[4].replace(' ', '').replace(',', '.')
+        total_sum_ICA += float(ICA)
+
+# Skriv ut den totala summan
+print("Totals in different posts:")
+print()
+print("Lön:", total_sum_lon)
+print("DREAMS:", total_sum_dreams)
+print("ICA:", total_sum_ICA)
 # Skriv ut den totala summan
 print("Totals in different posts:")
 print("DREAMS:", total_sum)
